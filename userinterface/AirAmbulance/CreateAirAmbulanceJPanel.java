@@ -5,25 +5,11 @@
  */
 package userinterface.AirAmbulance;
 
-import userinterface.Hospital.*;
-import userinterface.DoctorRole.*;
-import Business.EcoSystem;
-import Business.Employee.Employee;
+import Business.AirAmbulance.AirAmbulance;
+import Business.AirAmbulance.AirAmbulanceDirectory;
 import Business.Enterprise.Enterprise;
-import Business.Organization.DoctorOrganization;
-import Business.Organization.OrganizationDirectory;
-import Business.UserAccount.UserAccount;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import Business.Hospital.Hospital;
-import Business.Hospital.HospitalDirectory;
-import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 
@@ -34,49 +20,24 @@ import javax.swing.JOptionPane;
  */
 public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
     private JPanel userProcessContainer;
-    private UserAccount userAccount;
-    private OrganizationDirectory orgdir;
-    private EcoSystem business;
     private Enterprise enterprise;
-    private DoctorOrganization organization;
-    private HospitalDirectory hospitaldir;
-    private Hospital hospital;
+    private AirAmbulanceDirectory airambulancedir;
 
     /**
      * Creates new form CheckHospitalJPanel
      */
-    /*public CreateHospitalJPanel() {
-//        initComponents();
-//        this.userProcessContainer = userProcessContainer;
-//        this.organization =  organization;        
-//        this.userAccount = userAccount;
-//        this.enterprise = enterprise;
-//        this.orgdir = enterprise.getOrganizationDirectory();
-    }*/
-
-   /* CreateHospitalJPanel(JPanel userProcessContainer, UserAccount userAccount, EcoSystem business, Enterprise enterprise, OrganizationDirectory orgdir) {
-        initComponents();
-        this.userProcessContainer = userProcessContainer;
-        this.organization =  organization;        
-        this.userAccount = userAccount;
-        this.enterprise = enterprise;
-        this.orgdir = enterprise.getOrganizationDirectory();//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    
 
     CreateAirAmbulanceJPanel(JPanel userProcessContainer, Enterprise enterprise) {
       initComponents();
         this.userProcessContainer = userProcessContainer;
-//        this.organization =  organization;        
-//        this.userAccount = userAccount;
         this.enterprise = enterprise;
-        this.hospitaldir = enterprise.getHospitalDirectory();
+        this.airambulancedir = enterprise.getAirambulancedir();
        // this.orgdir = enterprise.getOrganizationDirectory(); // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     populateTable();
     }
 
-    /*CreateHospitalJPanel(JPanel userProcessContainer, OrganizationDirectory organizationDirectory) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -100,6 +61,8 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         btnHospitalSubmit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -127,7 +90,7 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
             tblHospital.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 184, -1, 122));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, 570, 122));
 
         btnBack.setText("<Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -135,23 +98,27 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
                 btnBackActionPerformed(evt);
             }
         });
-        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 324, -1, -1));
-        add(TxtFldHospitalId, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 65, 59, -1));
+        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, -1, -1));
+        add(TxtFldHospitalId, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 130, -1));
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel1.setText("AirAmbulance_ID");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 68, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel2.setText("AirAmbulance_Name");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 106, -1, -1));
-        add(TxtFldHospitalName, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 103, 59, -1));
-        add(TxtFldLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(589, 65, 54, -1));
-        add(TxtFldTreatmentAvailability, new org.netbeans.lib.awtextra.AbsoluteConstraints(589, 103, 54, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 184, -1, 10));
+        add(TxtFldHospitalName, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 130, -1));
+        add(TxtFldLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, 140, -1));
+        add(TxtFldTreatmentAvailability, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 140, -1));
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel3.setText("Patient Capacity");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 68, -1, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, -1, -1));
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel4.setText("Availability");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(492, 106, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, -1, -1));
 
         btnHospitalSubmit.setText("Submit");
         btnHospitalSubmit.addActionListener(new java.awt.event.ActionListener() {
@@ -159,7 +126,7 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
                 btnHospitalSubmitActionPerformed(evt);
             }
         });
-        add(btnHospitalSubmit, new org.netbeans.lib.awtextra.AbsoluteConstraints(269, 129, -1, -1));
+        add(btnHospitalSubmit, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, -1, -1));
 
         btnDelete.setText("Delete record");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -167,46 +134,75 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
                 btnDeleteActionPerformed(evt);
             }
         });
-        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 324, -1, -1));
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 430, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel5.setText("Create AirAmbulance");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, -1, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-100, -270, -1, 1170));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHospitalSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHospitalSubmitActionPerformed
         // TODO add your handling code here:
-        Hospital hospital = new Hospital();
-        //HospitalDirectory var = new HospitalDirectory();
-        //Hospital hospital;
-      // hospital = hospitaldir.createHospital();
-      if(enterprise.getHospitalDirectory() == null){
-          enterprise.setHospitalDirectory(new HospitalDirectory());
-          hospitaldir= enterprise.getHospitalDirectory();
-          System.out.println("usernullhos");
+        try{
+        AirAmbulance airambulance = new AirAmbulance();
+      if(enterprise.getAirambulancedir()==null)
+      {
+          enterprise.setAirambulancedir(new AirAmbulanceDirectory());
       }
-        hospital = hospitaldir.addHospital();
-        hospital.setHospitalId(TxtFldHospitalId.getText().toString());
-        hospital.setHospitalLocation(TxtFldLocation.getText().toString());
-        hospital.setHospitalName(TxtFldHospitalName.getText().toString());
-        hospital.setHospitalTreatAvailability(TxtFldTreatmentAvailability.getText().toString());
-       // hospital.setHospitalDept(TxtFldDepartment.getText().toString());
-        //hospital = hospitaldir.addHospital();
+      
+      for(AirAmbulance a:enterprise.getAirambulancedir().getAmbulanceList())
+      {
+          if(a.getAmbulanceId().equalsIgnoreCase(TxtFldHospitalId.getText()) 
+                  && a.getAmbulanceName().equalsIgnoreCase(TxtFldHospitalName.getText()) 
+                  && a.getAvailability().equalsIgnoreCase(TxtFldTreatmentAvailability.getText())&& 
+                  a.getPatientCapacity()==Integer.parseInt(TxtFldLocation.getText()))
+          {
+              JOptionPane.showMessageDialog(null, "please add different value");
+                return;
+          }
+      }
+      airambulancedir=enterprise.getAirambulancedir();
+        airambulance = airambulancedir.addAirAmbulance();
+        airambulance.setAmbulanceId(TxtFldHospitalId.getText());
+        airambulance.setAmbulanceName(TxtFldHospitalName.getText());
+        airambulance.setPatientCapacity(Integer.parseInt(TxtFldLocation.getText()));
+        airambulance.setAvailability(TxtFldTreatmentAvailability.getText());
         
         populateTable();
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
         
     }//GEN-LAST:event_btnHospitalSubmitActionPerformed
 
     public void populateTable(){
+        try{
         DefaultTableModel model = (DefaultTableModel) tblHospital.getModel();
         
         model.setRowCount(0);
-        for(Hospital h : hospitaldir.gethospitalList()){
-       // for (Hospital h : organization.getHospitalDirectory().gethospitalList()){
+        if(airambulancedir!=null)
+        {
             
-            Object[] row = new Object[5];
+        
+        for(AirAmbulance h : airambulancedir.getAmbulanceList()){
+       
+            
+            Object[] row = new Object[4];
             row[0] = h;
-            row[1] = h.getHospitalName();
-            row[2] = h.getHospitalLocation();
-            row[3] = h.getHospitalTreatAvailability();
-            row[4] = h.getHospitalDept();
+            row[1] = h.getAmbulanceName();
+            row[2] = h.getPatientCapacity();
+            row[3] = h.getAvailability();
+     
             model.addRow(row);
+        }
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
         }
     }
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -218,6 +214,7 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        try{
       int p = JOptionPane.showConfirmDialog(null, "Confirm delete?","Delete",JOptionPane.YES_NO_OPTION);
       if(p==0){
       
@@ -227,9 +224,9 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
         
         if(selectedrow >= 0)
         {
-        Hospital h = (Hospital) tblHospital.getValueAt(selectedrow, 0);
+        AirAmbulance h = (AirAmbulance) tblHospital.getValueAt(selectedrow, 0);
 
-        hospitaldir.deleteVitals(h);
+        airambulancedir.deleteVitals(h);
        
         
         JOptionPane.showMessageDialog(null, "Record has been deleted..");
@@ -241,6 +238,10 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
         
                 JOptionPane.showMessageDialog(null,"Please select any row.");
     }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
 
@@ -256,6 +257,8 @@ public class CreateAirAmbulanceJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblHospital;
     // End of variables declaration//GEN-END:variables

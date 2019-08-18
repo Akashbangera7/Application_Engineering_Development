@@ -5,15 +5,31 @@
  */
 package userinterface.AirAmbulance;
 
+import Business.AirAmbulance.AirAmbulance;
+import Business.AirAmbulance.AirAmbulanceDirectory;
+import Business.EcoSystem;
 import Business.Enterprise.Enterprise;
+import Business.Enterprise.EnterpriseDirectory;
+import Business.Enterprise.HospitalEnterprise;
+import Business.Hospital.Hospital;
+import Business.Hospital.HospitalDirectory;
+import Business.Network.Network;
+import Business.Organization.DoctorOrganization;
+import Business.Organization.MedicalTeamOrganization;
+import Business.Organization.Organization;
 import Business.Organization.OrganizationDirectory;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Business.Organization.PilotOrganization;
+import Business.Pilot.PilotDirectory;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.AirAmbulanceWorkRequest;
+import Business.WorkQueue.GovernmentWorkRequest;
+import Business.WorkQueue.WorkQueue;
+import Business.WorkQueue.WorkRequest;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -21,15 +37,48 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AirAmbulanceCatalogJPanel extends javax.swing.JPanel {
 
+    private JPanel userProcessContainer;
+    private UserAccount userAccount;
+    private OrganizationDirectory orgdir;
+    private EcoSystem business;
+    private Enterprise enterprise;
+    private DoctorOrganization organization;
+    private AirAmbulanceDirectory airambulancedir;
+    private HospitalDirectory hospitaldir;
+    private Hospital hospital;
+    private AirAmbulanceWorkRequest request;
+    private PilotDirectory pilotdir;
+    private EnterpriseDirectory enterpriseDirectory;
+    private Network network;
     /**
      * Creates new form AirAmbulanceCatalogJPanel
      */
-    JPanel userProcessContainer;
-    Enterprise enterprise;
-    public AirAmbulanceCatalogJPanel(JPanel userProcessContainer,OrganizationDirectory directory) {
+    
+    public AirAmbulanceCatalogJPanel(JPanel userProcessContainer, Enterprise enterprise,AirAmbulanceWorkRequest request,Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.enterprise = enterprise;
+        this.request=request;
+        this.orgdir=enterprise.getOrganizationDirectory();
+        this.network=network;
+        //System.out.println("userin"+request.getHospital().getHospitalName());
+        //this.userProcessContainer = userProcessContainer;
+//        this.organization =  organization;        
+//        this.userAccount = userAccount;
+        //this.enterprise = enterprise;
+        //this.hospitaldir = enterprise.getHospitalDirectory();
+        this.airambulancedir = enterprise.getAirambulancedir();
+        this.enterpriseDirectory=network.getEnterpriseDirectory();
+        populateTable();
+        popData();
+        populatePilotComboBox();
+        populateMedicalTeamComboBox();
+        populateDoctorComboBox();
+        PopulateJTable();
+        
+        
+        
+        
     }
 
     /**
@@ -41,75 +90,400 @@ public class AirAmbulanceCatalogJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnCheckWeather = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAmbulance = new javax.swing.JTable();
-        btnAmbulance = new javax.swing.JButton();
-        btnBack = new javax.swing.JButton();
+        tblHospital = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblHospitalDetails = new javax.swing.JTable();
+        backJButton = new javax.swing.JButton();
+        btnCheckLocation = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        comboAssignDoctor = new javax.swing.JComboBox();
+        comboPilot = new javax.swing.JComboBox();
+        comboMedicalTeam = new javax.swing.JComboBox();
+        btnAmbulance1 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        TblGovtWorkRequest1 = new javax.swing.JTable();
+        BtnProcessRequest1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
-        tblAmbulance.setModel(new javax.swing.table.DefaultTableModel(
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnCheckWeather.setText("Check For Weather Details");
+        btnCheckWeather.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckWeatherActionPerformed(evt);
+            }
+        });
+        add(btnCheckWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 350, 250, -1));
+
+        tblHospital.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Ambulancel_ID", "Ambulancel_Name", "Patient_Capacity", "Availability"
+                "AirAmbulancel_ID", "AirAmbulance_Name", "Patient_Capacity", "Availability"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblAmbulance);
+        jScrollPane1.setViewportView(tblHospital);
 
-        btnAmbulance.setText("Select Air Ambulance");
-        btnAmbulance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAmbulanceActionPerformed(evt);
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, 122));
+
+        tblHospitalDetails.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Hospital Id", "Hospital Name", "Department", "Location", "Treatment Available", "Message", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        jScrollPane2.setViewportView(tblHospitalDetails);
 
-        btnBack.setText("<Back");
+        add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, -1, 110));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnBack)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAmbulance))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(120, 120, 120)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAmbulance)
-                    .addComponent(btnBack))
-                .addContainerGap(261, Short.MAX_VALUE))
-        );
+        backJButton.setText("<< Back");
+        backJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backJButtonActionPerformed(evt);
+            }
+        });
+        add(backJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 630, -1, -1));
+
+        btnCheckLocation.setText("Check the location of destination hospital");
+        btnCheckLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckLocationActionPerformed(evt);
+            }
+        });
+        add(btnCheckLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 400, 250, -1));
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel2.setText("Assign Pilot");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 110, -1));
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel3.setText("Assign Medical Team");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 130, -1));
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel4.setText("Assign Doctor");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 110, -1));
+
+        add(comboAssignDoctor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 450, 170, -1));
+
+        add(comboPilot, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 170, -1));
+
+        add(comboMedicalTeam, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, 170, -1));
+
+        btnAmbulance1.setText("Select Air Ambulance");
+        btnAmbulance1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAmbulance1ActionPerformed(evt);
+            }
+        });
+        add(btnAmbulance1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 450, 250, -1));
+
+        TblGovtWorkRequest1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Disaster", "Medicine", "Casualty Type", "Quantity", "Message", "Severity", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(TblGovtWorkRequest1);
+
+        add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 510, -1, 90));
+
+        BtnProcessRequest1.setText("Process Request");
+        BtnProcessRequest1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnProcessRequest1ActionPerformed(evt);
+            }
+        });
+        add(BtnProcessRequest1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 630, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setText("Ambulance Catalog");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(-50, -150, -1, 1230));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAmbulanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAmbulanceActionPerformed
-        // TODO add your handling code here:
+    private void btnCheckWeatherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckWeatherActionPerformed
+        try{
+         CheckWeatherReportJPanel muajp = new CheckWeatherReportJPanel(userProcessContainer, enterprise);
+        userProcessContainer.add("CheckWeatherReportJPanel", muajp);
 
-    }//GEN-LAST:event_btnAmbulanceActionPerformed
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+        
+        //JOptionPane.showMessageDialog(null, "Ambulance has been arranged successfully");
+    }catch(Exception e)
+    {
+        JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+    }
+    }
+     public void populatePilotComboBox(){
+         try{
+        comboPilot.removeAllItems();
+        if(orgdir!=null)
+        {
+            if(orgdir.getOrganizationList().size()>0){
+        for (Organization pilot : orgdir.getOrganizationList()){
+            System.out.println("sisi"+orgdir.getOrganizationList());
+            if(pilot instanceof PilotOrganization)
+            {
+            comboPilot.addItem(pilot);
+            }
+        }
+            }
+        }
+    }catch(Exception e)
+    {
+        JOptionPane.showMessageDialog(null, "System is down..please contact system admin");
+    }
+         
+     }
+     
+     public void populateDoctorComboBox(){
+       try{
+         comboAssignDoctor.removeAllItems();
+        if(enterpriseDirectory!=null)
+        {
+            
+        for (Enterprise ent :enterpriseDirectory.getEnterpriseList()){
+            
+            if(ent instanceof HospitalEnterprise)
+            {
+                for(Organization org:ent.getOrganizationDirectory().getOrganizationList())
+                {
+            
+            if(org instanceof DoctorOrganization)
+            {
+            comboAssignDoctor.addItem(org);
+            }
+        
+            }
+        }
+        }
+        }
+       }catch(Exception e)
+       {
+           JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+       }
+    }
+     
+     public void populateMedicalTeamComboBox(){
+         try{
+        comboMedicalTeam.removeAllItems();
+        if(orgdir!=null)
+        {
+        for (Organization team :orgdir.getOrganizationList()){
+            if(team instanceof MedicalTeamOrganization)
+            {
+                comboMedicalTeam.addItem(team);
+            }
+            
+        }
+        }
+         }catch(Exception e)
+         {
+             JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+         }
+                 
+    }
+        
+        
+                                                  
+
+    public void popData()
+    {
+        try{
+         DefaultTableModel model = (DefaultTableModel) tblHospitalDetails.getModel();
+        //DefaultTableModel model = (DefaultTableModel) tblHospital.getModel();
+        
+        model.setRowCount(0);
+    //    for(WorkRequest req:enterprise.getWorkQueue().getWorkRequestList()){
+//            if(request instanceof AirAmbulanceWorkRequest)
+//            {
+                //System.out.println("insta"+request.getHospital().getHospitalName());
+             Object[] row = new Object[7];
+            row[0] = request.getHospital();
+            row[1] = request.getHospital().getHospitalName();
+            row[2] = request.getHospital().getHospitalDept();
+            row[3] = request.getHospital().getHospitalLocation();
+            row[4] = request.getHospital().getHospitalTreatAvailability();
+            row[5] = request;
+            row[6] = request.getStatus();
+            model.addRow(row);
+        //}
+      }catch(Exception e)
+      {
+          JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+      }
+    }
+    public void populateTable(){
+        try{
+        DefaultTableModel model = (DefaultTableModel) tblHospital.getModel();
+        //DefaultTableModel model = (DefaultTableModel) tblHospital.getModel();
+        
+        model.setRowCount(0);
+        if(airambulancedir!=null)
+        {
+        for(AirAmbulance h : airambulancedir.getAmbulanceList()){
+       // for (Hospital h : organization.getHospitalDirectory().gethospitalList()){
+            
+            Object[] row = new Object[4];
+            row[0] = h;
+            row[1] = h.getAmbulanceName();
+            row[2] = h.getPatientCapacity();
+            row[3] = h.getAvailability();
+            model.addRow(row);
+        }
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
+    }
+    
+    
+    public void PopulateJTable(){
+        try{
+        DefaultTableModel model = (DefaultTableModel) TblGovtWorkRequest1.getModel();
+        
+        model.setRowCount(0);
+        if(enterprise.getWorkQueue()==null)
+        {
+            enterprise.setWorkQueue(new WorkQueue());
+        }
+        for(WorkRequest w : enterprise.getWorkQueue().getWorkRequestList()){
+            if (w instanceof GovernmentWorkRequest){
+                
+                Object[] row = new Object[7];
+                row[0] = w;
+                row[1] = ((GovernmentWorkRequest)w).getSupplyadmin().getMedicine();
+                row[2] = ((GovernmentWorkRequest)w).getContingencyadmin().getCasualtyType();
+                row[3] = ((GovernmentWorkRequest)w).getSupplyadmin().getQuantity();
+                row[4] =  ((GovernmentWorkRequest)w).getMessage();
+                row[5] =  ((GovernmentWorkRequest)w).getContingencyadmin().getSeverity();
+                //row[6] =   ((GovernmentWorkRequest)w).getSender("Supply Admin");
+                row[6] =  ((GovernmentWorkRequest)w).getStatus();
+                model.addRow(row);
+            }
+            }
+        }catch(Exception w)
+        {
+            JOptionPane.showMessageDialog(null, "Contact system admin");
+        }
+        
+      
+     
+    
+   
+                          
+
+// TODO add your handling code here:
+
+    }//GEN-LAST:event_btnCheckWeatherActionPerformed
+
+    private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
+
+        userProcessContainer.remove(this);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_backJButtonActionPerformed
+
+    private void btnCheckLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckLocationActionPerformed
+        // TODO add your handling code here:
+        DestiantionHospitalLocationJPanel muajp = new DestiantionHospitalLocationJPanel(userProcessContainer, enterprise);
+        userProcessContainer.add("DestiantionHospitalLocationJPanel", muajp);
+
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }//GEN-LAST:event_btnCheckLocationActionPerformed
+
+    private void btnAmbulance1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAmbulance1ActionPerformed
+       JOptionPane.showMessageDialog(null,"Air ambulance arranged successfully..");
+       
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAmbulance1ActionPerformed
+
+    private void BtnProcessRequest1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnProcessRequest1ActionPerformed
+        // TODO add your handling code here:
+        try{
+        DefaultTableModel dtm = (DefaultTableModel) TblGovtWorkRequest1.getModel();
+        int selectedrow = TblGovtWorkRequest1.getSelectedRow();{
+            if(selectedrow<0){
+                JOptionPane.showMessageDialog(null, "Select Atleast One row");
+            }
+            else{
+                GovernmentWorkRequest w = (GovernmentWorkRequest) TblGovtWorkRequest1.getValueAt(selectedrow, 0);
+                System.out.println( "ADSS" + w.getStatus());
+                
+                w.setStatus("Processed");
+                //w.setSender(userAccount);
+                populateTable();
+                JOptionPane.showMessageDialog(null, "AirAmbulance has been asigned siccessfully");
+            }
+    }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Contact system admin");
+        }
+    }//GEN-LAST:event_BtnProcessRequest1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAmbulance;
-    private javax.swing.JButton btnBack;
+    private javax.swing.JButton BtnProcessRequest1;
+    private javax.swing.JTable TblGovtWorkRequest1;
+    private javax.swing.JButton backJButton;
+    private javax.swing.JButton btnAmbulance1;
+    private javax.swing.JButton btnCheckLocation;
+    private javax.swing.JButton btnCheckWeather;
+    private javax.swing.JComboBox comboAssignDoctor;
+    private javax.swing.JComboBox comboMedicalTeam;
+    private javax.swing.JComboBox comboPilot;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblAmbulance;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable tblHospital;
+    private javax.swing.JTable tblHospitalDetails;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -9,7 +9,9 @@ import Business.Enterprise.Enterprise;
 import javax.swing.JPanel;
 import Business.EcoSystem;
 import Business.Employee.Employee;
+import Business.Employee.EmployeeDirectory;
 import Business.Organization.Organization;
+import Business.Organization.OrganizationDirectory;
 import Business.Role.Role;
 import Business.UserAccount.UserAccount;
 import java.awt.CardLayout;
@@ -38,35 +40,62 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
     
     
     public void popOrganizationComboBox() {
+        try{
         organizationJComboBox.removeAllItems();
+        if(enterprise.getOrganizationDirectory()==null)
+        {
+            enterprise.setOrganizationDirectory(new OrganizationDirectory());
+        }
 
         for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
             organizationJComboBox.addItem(organization);
         }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
     }
     
     public void populateEmployeeComboBox(Organization organization){
+        try{
         employeeJComboBox.removeAllItems();
-        
+        if(organization.getEmployeeDirectory()==null)
+        {
+            organization.setEmployeeDirectory(new EmployeeDirectory());
+        }
         for (Employee employee : organization.getEmployeeDirectory().getEmployeeList()){
             employeeJComboBox.addItem(employee);
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
         }
     }
     
     private void populateRoleComboBox(Organization e){
+        try{
         roleJComboBox.removeAllItems();
-       // for(Role role : enterprise.getSupportedRole())
+       
         for (Role role : e.getSupportedRole())
         {
             roleJComboBox.addItem(role);
         }
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
     }
 
     public void popData() {
+        try{
 
         DefaultTableModel model = (DefaultTableModel) userJTable.getModel();
 
         model.setRowCount(0);
+        if(enterprise.getOrganizationDirectory()==null)
+        {
+            enterprise.setOrganizationDirectory(new OrganizationDirectory());
+        }
 
         for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
             for (UserAccount ua : organization.getUserAccountDirectory().getUserAccountList()) {
@@ -75,6 +104,10 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
                 row[1] = ua.getRole();
                 ((DefaultTableModel) userJTable.getModel()).addRow(row);
             }
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
         }
     }
 
@@ -94,7 +127,6 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         userJTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        passwordJTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         employeeJComboBox = new javax.swing.JComboBox();
         backjButton1 = new javax.swing.JButton();
@@ -102,6 +134,9 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
         organizationJComboBox = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         roleJComboBox = new javax.swing.JComboBox();
+        passwordJTextField = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -111,11 +146,12 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
                 createUserJButtonActionPerformed(evt);
             }
         });
-        add(createUserJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(383, 430, -1, -1));
-        add(nameJTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 350, 146, -1));
+        add(createUserJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 550, -1, -1));
+        add(nameJTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 460, 146, -1));
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel1.setText("User Name");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 353, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 460, -1, -1));
 
         userJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -142,56 +178,67 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(userJTable);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(173, 28, 375, 179));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, 375, 179));
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel2.setText("Password");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 390, -1, -1));
-        add(passwordJTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 390, 146, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 500, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel3.setText("Employee");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 280, -1, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, -1, -1));
 
         employeeJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 employeeJComboBoxActionPerformed(evt);
             }
         });
-        add(employeeJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(188, 277, 146, -1));
+        add(employeeJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 380, 146, -1));
 
-        backjButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         backjButton1.setText("<< Back");
         backjButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backjButton1ActionPerformed(evt);
             }
         });
-        add(backjButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 444, 112, -1));
+        add(backjButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 580, 112, -1));
 
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel5.setText("Organization");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 240, -1, -1));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, -1, -1));
 
         organizationJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 organizationJComboBoxActionPerformed(evt);
             }
         });
-        add(organizationJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 237, 146, -1));
+        add(organizationJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, 146, -1));
 
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel4.setText("Role");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 324, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 420, -1, -1));
 
         roleJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleJComboBoxActionPerformed(evt);
             }
         });
-        add(roleJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(187, 321, 146, -1));
+        add(roleJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 420, 146, -1));
+        add(passwordJTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 500, 150, -1));
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel7.setText("Manage User");
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, -1, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-420, -290, -1, 1200));
     }// </editor-fold>//GEN-END:initComponents
 
     private void createUserJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUserJButtonActionPerformed
+        try{
         String userName = nameJTextField.getText();
         String password = passwordJTextField.getText();
-        if(!((userName.equals("") || (password.equals(""))))){
+        if(!((userName.equalsIgnoreCase("") || (password.equals(""))))){
             if(EcoSystem.checkIfUsernameIsUnique(userName)){
                 Organization organization = (Organization) organizationJComboBox.getSelectedItem();
                 Employee employee = (Employee) employeeJComboBox.getSelectedItem();
@@ -207,6 +254,10 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
         }else{
             JOptionPane.showMessageDialog(null, "Enter value", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "System is down..Please contact system admin");
+        }
     }//GEN-LAST:event_createUserJButtonActionPerformed
 
     private void backjButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backjButton1ActionPerformed
@@ -217,10 +268,15 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_backjButton1ActionPerformed
 
     private void organizationJComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_organizationJComboBoxActionPerformed
+        try{
         Organization organization = (Organization) organizationJComboBox.getSelectedItem();
         if (organization != null){
             populateEmployeeComboBox(organization);
             populateRoleComboBox(organization);
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
         }
     }//GEN-LAST:event_organizationJComboBoxActionPerformed
 
@@ -242,10 +298,12 @@ public class AirAmbulanceManageUserJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameJTextField;
     private javax.swing.JComboBox organizationJComboBox;
-    private javax.swing.JTextField passwordJTextField;
+    private javax.swing.JPasswordField passwordJTextField;
     private javax.swing.JComboBox roleJComboBox;
     private javax.swing.JTable userJTable;
     // End of variables declaration//GEN-END:variables

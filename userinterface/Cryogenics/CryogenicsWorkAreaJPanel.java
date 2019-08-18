@@ -8,13 +8,12 @@ import Business.Cryogenics.Cryogenist;
 import Business.Cryogenics.CryogenicDirectory;
 import Business.Enterprise.Enterprise;
 import Business.Enterprise.EnterpriseDirectory;
-import Business.Hospital.HospitalDirectory;
-import Business.Organization.DoctorOrganization;
 import Business.Organization.OrganizationDirectory;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import Business.Organization.CryogenicsOrganization;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -34,7 +33,7 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
     public CryogenicsWorkAreaJPanel(JPanel userProcessContainer, UserAccount account,CryogenicsOrganization  organization,EnterpriseDirectory entdir,Enterprise enterprise) {
         initComponents();
         
-        this.cryodir = enterprise.getCryogenicDirectory();
+        this.cryodir = enterprise.getCryogenicsdir();
         this.userAccount = account;
         this.cryoOrganization = organization;
         this.orgdir = orgdir;
@@ -43,16 +42,16 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
     }
     
           public void PopulateTable(){
-        
+        try{
         DefaultTableModel model = (DefaultTableModel) TblCryogenics.getModel();
         model.setRowCount(0);
-        if(enterprise.getCryogenicDirectory()== null){
-          enterprise.setCryogenicDirectory(new CryogenicDirectory());
+        if(enterprise.getCryogenicsdir()== null){
+          enterprise.setCryogenicsdir(new CryogenicDirectory());
         }
         
-             // System.out.println("ssid"+enterprise.getName());
-       for(Cryogenist cr : enterprise.getCryogenicDirectory().getCryogenicslist()){
-            // Cryogenist cr = new Cryogenist();
+           
+       for(Cryogenist cr : enterprise.getCryogenicsdir().getCryogenicslist()){
+            
             Object row[] = new Object[4];
                    row[0] = cr;
                    row[1] = cr.getCryogenistName();
@@ -63,7 +62,11 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
         
         
     }
+      }catch(Exception e)
+      {
+          JOptionPane.showMessageDialog(null, "system is down please contact system admin");
       }
+          }
     
   
 
@@ -88,12 +91,23 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         TxtOrigin = new javax.swing.JTextField();
         btnBack = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        add(TxtOrganName, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 140, 130, -1));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel1.setText("Cryogenics Organ");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel2.setText("Cryogenist Name");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel3.setText("Destination");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, -1, -1));
 
         BtnSubmitCryogenics.setText("Submit");
         BtnSubmitCryogenics.addActionListener(new java.awt.event.ActionListener() {
@@ -101,111 +115,74 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
                 BtnSubmitCryogenicsActionPerformed(evt);
             }
         });
+        add(BtnSubmitCryogenics, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, -1, -1));
 
         TblCryogenics.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Cryogenics Organ", "Cryogenist Name", "Origin", "Destination"
             }
-        ));
-        jScrollPane1.setViewportView(TblCryogenics);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        jLabel4.setText("Origin");
-
-        btnBack.setText("Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        jScrollPane1.setViewportView(TblCryogenics);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(66, 66, 66)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TxtOrganName)
-                            .addComponent(TxtCryogenistName)
-                            .addComponent(TxtDestination, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                            .addComponent(TxtOrigin))
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(BtnSubmitCryogenics))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(btnBack)))
-                .addContainerGap(112, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(101, 101, 101)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TxtOrganName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(TxtCryogenistName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(TxtOrigin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(TxtDestination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(BtnSubmitCryogenics)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnBack)
-                .addContainerGap(129, Short.MAX_VALUE))
-        );
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, 490, 100));
+        add(TxtCryogenistName, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 180, 130, -1));
+        add(TxtDestination, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 130, -1));
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel4.setText("Origin");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
+        add(TxtOrigin, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 220, 130, -1));
+
+        btnBack.setText("Back");
+        add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 530, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel5.setText("Cryogenics Admin Work Area");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, -1));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-110, -30, -1, 1110));
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnSubmitCryogenicsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSubmitCryogenicsActionPerformed
         // TODO add your handling code here:
         //Cryogenist cryo = new Cryogenist();
-        if(enterprise.getCryogenicDirectory()== null){
-          enterprise.setCryogenicDirectory(new CryogenicDirectory());
+        try{
+        if(enterprise.getCryogenicsdir()== null){
+          enterprise.setCryogenicsdir(new CryogenicDirectory());
         }
-         Cryogenist cryodir= enterprise.getCryogenicDirectory().addCryogenist();
-          System.out.println("usernullhos");
+         Cryogenist cryodir= enterprise.getCryogenicsdir().addCryogenist();
+          
       
         cryodir.setCryogenicsOrgan(TxtOrganName.getText());
         cryodir.setCryogenistName(TxtCryogenistName.getText());
         cryodir.setOrigin(TxtOrigin.getText());
         cryodir.setDestination(TxtDestination.getText());
+        if(TxtCryogenistName.getText().equals("")||TxtDestination.getText().equals("")||TxtOrganName.getText().equals("")||TxtOrigin.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, "Enter some details");
+            return;
+        }
         PopulateTable();
         
-        //for(Cryogenist c : orgdir.getCryogenicslist()){
-            
+        
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
         
     }//GEN-LAST:event_BtnSubmitCryogenicsActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBackActionPerformed
 
      
 
@@ -221,6 +198,8 @@ public class CryogenicsWorkAreaJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
