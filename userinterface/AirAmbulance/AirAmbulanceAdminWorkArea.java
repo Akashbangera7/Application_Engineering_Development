@@ -5,16 +5,14 @@
  */
 package userinterface.AirAmbulance;
 
-import Business.EcoSystem;
+
 import Business.Enterprise.Enterprise;
-import static Business.Enterprise.Enterprise.EnterpriseType.Hospital;
-import Business.Hospital.Hospital;
 import Business.Network.Network;
-import Business.Organization.OrganizationDirectory;
-import Business.UserAccount.UserAccount;
 import Business.WorkQueue.AirAmbulanceWorkRequest;
+import Business.WorkQueue.WorkQueue;
 import Business.WorkQueue.WorkRequest;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,17 +27,19 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
      */
     JPanel userProcessContainer;
     Enterprise enterprise;
+    Network network;
+    //AirAmbulanceDirectory airambulancedir;
     //Network network;
 //    UserAccount userAccount;
 //    Hospital hospital;
 //    OrganizationDirectory orgdir;
 //    EcoSystem business;
     //OrganizationDirectory directory;
-    public AirAmbulanceAdminWorkArea(JPanel userProcessContainer,  Enterprise enterprise) {
+    public AirAmbulanceAdminWorkArea(JPanel userProcessContainer,  Enterprise enterprise,Network network) {
         initComponents();
         this.userProcessContainer = userProcessContainer;
         this.enterprise = enterprise;
-        //this.network=network;
+        this.network=network;
         //this.directory=directory;
 //        this.userAccount=userAccount;
 //        this.hospital=hospital;
@@ -50,15 +50,19 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
     }
     
     public void populateTable() {
+        try{
         DefaultTableModel model = (DefaultTableModel) tblHospitalDetails.getModel();
 
         model.setRowCount(0);
-        System.out.println("HI not in the for loop"+enterprise.getName());
-        System.out.println("Hsize"+enterprise.getWorkQueue().getWorkRequestList().size());
+//        System.out.println("HI not in the for loop"+enterprise.getName());
+//        System.out.println("Hsize"+enterprise.getWorkQueue().getWorkRequestList().size());
+    if(enterprise.getWorkQueue()==null){
+        enterprise.setWorkQueue(new WorkQueue());
+    }
         for (WorkRequest request : enterprise.getWorkQueue().getWorkRequestList()) {
-            System.out.println("HI in the for loop"+enterprise.getName());
+           // System.out.println("HI in the for loop"+enterprise.getName());
             if(request instanceof AirAmbulanceWorkRequest)
-                System.out.println("HI in the for loop");
+               // System.out.println("HI in the for loop");
             {
             Object[] row = new Object[7];
             row[0] = ((AirAmbulanceWorkRequest) request).getHospital();
@@ -67,8 +71,8 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
             row[3] = ((AirAmbulanceWorkRequest) request).getHospital().getHospitalLocation();
             row[4] = ((AirAmbulanceWorkRequest) request).getHospital().getHospitalTreatAvailability();
             
-            row[5] = request.getMessage();
-            row[6] = request;
+            row[5] = request;
+            row[6] = request.getStatus();
             
 //            row[1] = request.getSender().getEmployee().getName();
 //            row[2] = request.getReceiver() == null ? null : request.getReceiver().getEmployee().getName();
@@ -77,6 +81,9 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
             model.addRow(row);
         
         }
+    }
+    }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
     }
     }
 
@@ -98,7 +105,12 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
         btnCreateAmbulance = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHospitalDetails = new javax.swing.JTable();
+        btnCheckAirAmbulance = new javax.swing.JButton();
+        btnViewHospital = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -111,7 +123,7 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
                 userJButtonActionPerformed(evt);
             }
         });
-        add(userJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 150, -1));
+        add(userJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 150, -1));
 
         manageEmployeeJButton.setText("Manage Employee");
         manageEmployeeJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +131,7 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
                 manageEmployeeJButtonActionPerformed(evt);
             }
         });
-        add(manageEmployeeJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 160, 150, -1));
+        add(manageEmployeeJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 150, -1));
 
         manageOrganizationJButton.setText("Manage Organization");
         manageOrganizationJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -127,12 +139,12 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
                 manageOrganizationJButtonActionPerformed(evt);
             }
         });
-        add(manageOrganizationJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 110, 150, -1));
+        add(manageOrganizationJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 150, -1));
 
         enterpriseLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         enterpriseLabel.setText("Enterprise :");
-        add(enterpriseLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 71, 120, 30));
-        add(valueLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(199, 81, 130, 20));
+        add(enterpriseLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 120, 30));
+        add(valueLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 130, 30));
 
         btnCreateAmbulance.setText("Create Ambulance");
         btnCreateAmbulance.addActionListener(new java.awt.event.ActionListener() {
@@ -140,8 +152,9 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
                 btnCreateAmbulanceActionPerformed(evt);
             }
         });
-        add(btnCreateAmbulance, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 150, -1));
+        add(btnCreateAmbulance, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 100, 150, -1));
 
+        tblHospitalDetails.setBackground(new java.awt.Color(204, 204, 255));
         tblHospitalDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -151,7 +164,7 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -160,7 +173,31 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblHospitalDetails);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, -1, 110));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 570, 110));
+
+        btnCheckAirAmbulance.setBackground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
+        btnCheckAirAmbulance.setText("Check AirAmbulance");
+        btnCheckAirAmbulance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckAirAmbulanceActionPerformed(evt);
+            }
+        });
+        add(btnCheckAirAmbulance, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, -1, -1));
+
+        btnViewHospital.setText("View Hospital Detail");
+        btnViewHospital.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewHospitalActionPerformed(evt);
+            }
+        });
+        add(btnViewHospital, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 100, 140, -1));
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        jLabel2.setText("Work Request:");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, -1, -1));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1520, 1010));
     }// </editor-fold>//GEN-END:initComponents
 
     private void manageEmployeeJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageEmployeeJButtonActionPerformed
@@ -198,11 +235,56 @@ public class AirAmbulanceAdminWorkArea extends javax.swing.JPanel {
         layout.next(userProcessContainer);
     }//GEN-LAST:event_btnCreateAmbulanceActionPerformed
 
+    private void btnCheckAirAmbulanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckAirAmbulanceActionPerformed
+
+        try{
+        int selectedrow = tblHospitalDetails.getSelectedRow();
+        
+        if(selectedrow >= 0)
+        {
+         AirAmbulanceWorkRequest work=(AirAmbulanceWorkRequest)tblHospitalDetails.getValueAt(selectedrow, 5);
+        //AirAmbulanceWorkRequest r=request.getAirAmbulanceDetail();
+        //System.out.println("dfdsf"+work.getHospital().getHospitalName());
+        AirAmbulanceCatalogJPanel checkhospitalJPanel = new AirAmbulanceCatalogJPanel(userProcessContainer, enterprise,work,network);
+        userProcessContainer.add("AirAmbulanceCatalogJPanel", checkhospitalJPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCheckAirAmbulanceActionPerformed
+
+    private void btnViewHospitalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHospitalActionPerformed
+        // TODO add your handling code here:
+        try{
+        int selectedrow= tblHospitalDetails.getSelectedRow();
+        if(selectedrow>=0)
+        {
+        AirAmbulanceWorkRequest work=(AirAmbulanceWorkRequest)tblHospitalDetails.getValueAt(selectedrow, 5); 
+        ViewHospitalDetailsJPanel checkhospitalJPanel = new ViewHospitalDetailsJPanel(userProcessContainer,  enterprise,work);
+        userProcessContainer.add("ViewHospitalDetailsJPanel", checkhospitalJPanel);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+        }
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+        }
+    }//GEN-LAST:event_btnViewHospitalActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCheckAirAmbulance;
     private javax.swing.JButton btnCreateAmbulance;
+    private javax.swing.JButton btnViewHospital;
     private javax.swing.JLabel enterpriseLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton manageEmployeeJButton;
     private javax.swing.JButton manageOrganizationJButton;

@@ -10,6 +10,7 @@ import Business.Organization.Organization;
 import Business.Organization.Organization.Type;
 import Business.Organization.OrganizationDirectory;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
@@ -41,21 +42,23 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
 
      private void populateCombo(){
         organizationJComboBox.removeAllItems();
-      //  for (Type type : Organization.Type.values()){
-       //     if (!type.getValue().equals(Type.Clinic.getValue()))
+      
                 organizationJComboBox.addItem(Type.Pilot);
                 organizationJComboBox.addItem(Type.Safety);
                 organizationJComboBox.addItem(Type.MedicalTeam);
                 organizationJComboBox.addItem(Type.Meterologist);
-                organizationJComboBox.addItem(Type.Cryogenics);
                 
       //  }
     }
      private void populateTable(){
+         try{
         DefaultTableModel model = (DefaultTableModel) organizationJTable.getModel();
         
         model.setRowCount(0);
-        
+        if(enterprise.getOrganizationDirectory()==null)
+        {
+            enterprise.setOrganizationDirectory(new OrganizationDirectory());
+        }
         for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()){
             Object[] row = new Object[2];
             row[0] = organization.getOrganizationID();
@@ -63,6 +66,10 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
             
             model.addRow(row);
         }
+         }catch(Exception e)
+         {
+             JOptionPane.showMessageDialog(null, "system is down please contact system admin");
+         }
     }
     
 
@@ -84,15 +91,13 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         organizationJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "ID", "Name"
@@ -115,7 +120,7 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(organizationJTable);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(177, 72, 480, 92));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 180, 480, 92));
 
         addJButton.setText("Add Organization");
         addJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -123,18 +128,18 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
                 addJButtonActionPerformed(evt);
             }
         });
-        add(addJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(577, 322, -1, -1));
+        add(addJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 440, -1, -1));
 
-        organizationJComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         organizationJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 organizationJComboBoxActionPerformed(evt);
             }
         });
-        add(organizationJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 237, 81, -1));
+        add(organizationJComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 340, 81, -1));
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel1.setText("Organization Type ");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(292, 240, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, -1, -1));
 
         backJButton.setText("<< Back");
         backJButton.addActionListener(new java.awt.event.ActionListener() {
@@ -142,21 +147,38 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
                 backJButtonActionPerformed(evt);
             }
         });
-        add(backJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 322, -1, -1));
+        add(backJButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 490, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel2.setText("Manage AirAmbulance Organization");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(336, 32, -1, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel3.setText("Organization Name ");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(289, 288, -1, -1));
-        add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 285, 81, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, -1, -1));
+        add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 390, 81, -1));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/68577077-light-blue-wallpapers.jpg"))); // NOI18N
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-260, -270, -1, 1180));
     }// </editor-fold>//GEN-END:initComponents
 
     private void addJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addJButtonActionPerformed
 
+        try{
         Type type = (Type) organizationJComboBox.getSelectedItem();
+        if(!txtName.getText().equals("")&&txtName.getText().matches("^[a-zA-Z]*$"))
+        {
         enterprise.getOrganizationDirectory().createOrganization(type,txtName.getText());
         populateTable();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Enter some value");
+        }
+        }catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "System is down..please contact admin");
+        }
     }//GEN-LAST:event_addJButtonActionPerformed
 
     private void backJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backJButtonActionPerformed
@@ -177,6 +199,7 @@ public class AirAmbulanceOrganizationJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox organizationJComboBox;
     private javax.swing.JTable organizationJTable;
